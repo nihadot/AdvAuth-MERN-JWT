@@ -12,6 +12,7 @@ app.get("/", (req, res, next) => {
   res.send("Api running");
 });
 
+console.log(process.env.DATABASE_CONNECTION);
 // Connecting Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/private", require("./routes/private"));

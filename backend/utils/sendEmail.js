@@ -3,15 +3,15 @@ const ErrorResponse = require("../utils/errorResponse");
 
 const sendEmail = (options) => {
   const transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE,
+    service: "SendGrid",
     auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
+      user: "apikey",
+      pass: "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",
     },
   });
 
   const mailOptions = {
-    from: process.env.EMAIL_FROM,
+    from: "alen@lilacinfotech.com",
     to: options.to,
     subject: options.subject,
     html: options.text,
