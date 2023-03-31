@@ -35,13 +35,15 @@ exports.login = async (req, res, next) => {
 
 // @desc    Register user
 exports.register = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password,activeSubscription, planId } = req.body;
 
   try {
     const user = await User.create({
       username,
       email,
       password,
+      activeSubscription,
+      planId
     });
 
     sendToken(user, 200, res);

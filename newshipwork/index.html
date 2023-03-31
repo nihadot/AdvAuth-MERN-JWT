@@ -1,0 +1,342 @@
+<html lang="en">
+  <head>
+    <title>webWhiz Live Chat</title>
+    <base target="_parent" />
+    <link rel="stylesheet" href="/sample.style.css" />
+  </head>
+
+  <body>
+    <div class="chat-wrap" id="chat-wrap">
+      <div class="chat-launcher">
+        <button class="chat-launcher-btn" id="chat-launcher-btn">
+          <svg
+            stroke="currentColor"
+            fill="none"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            height="1em"
+            width="1em"
+            style="width: 38px; height: 38px"
+            viewBox="0 0 24 24"
+          >
+            <path d="M0 0h24v24H0z" stroke="none" />
+            <path
+              d="M5.821 4.91c3.898-2.765 9.469-2.539 13.073.536 3.667 3.127 4.168 8.238 1.152 11.897-2.842 3.447-7.965 4.583-12.231 2.805l-.232-.101-4.375.931-.075.013-.11.009-.113-.004-.044-.005-.11-.02-.105-.034-.1-.044-.076-.042-.108-.077-.081-.074-.073-.083-.053-.075-.065-.115-.042-.106-.031-.113-.013-.075-.009-.11.004-.113.005-.044.02-.11.022-.072 1.15-3.451-.022-.036C.969 12.45 1.97 7.805 5.59 5.079l.23-.168z"
+              fill="currentColor"
+              stroke="none"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="chat-widget">
+        <div class="chat-header">
+          <div class="chat-actions">
+            <button
+              class="chat-actions-btn chat-minimize-btn"
+              id="chat-minimize-btn"
+            >
+              <svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                height="1em"
+                width="1em"
+                style="width: 22px; height: 22px"
+                viewBox="0 0 24 24"
+              >
+                <path d="M0 0h24v24H0z" stroke="none" />
+                <path
+                  d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM9 4v16"
+                />
+                <path d="m14 10 2 2-2 2" />
+              </svg>
+            </button>
+            <button
+              class="chat-actions-btn chat-maximize-btn"
+              id="chat-maximize-btn"
+            >
+              <svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                height="1em"
+                width="1em"
+                style="width: 22px; height: 22px"
+                viewBox="0 0 24 24"
+              >
+                <path d="M0 0h24v24H0z" stroke="none" />
+                <path
+                  d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM15 4v16"
+                />
+                <path d="m10 10-2 2 2 2" />
+              </svg>
+            </button>
+            <button class="chat-actions-btn chat-close-btn" id="chat-close-btn">
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-x"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+          <h2 id="chat-heading">I'm your AI assistant</h2>
+          <p id="chat-description">
+            Ask me anything. I can answer same like chatGPT but with the data
+            from this website
+          </p>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+          <div class="chat-message chatbot">
+            <div class="chat-message-text">
+              Hello! How can I assist you today?
+            </div>
+          </div>
+        </div>
+        <form id="chat-form" class="chat-input-wrap">
+          <textarea
+            rows="1"
+            class="chat-input js-auto-size textarea"
+            id="chat-input"
+            placeholder="Type your message"
+          ></textarea>
+          <button class="chat-submit-btn" type="submit">
+            <svg width="16" height="16" fill="none">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="m4.394 14.7 9.356-5.4c1-.577 1-2.02 0-2.598L4.394 1.299a1.5 1.5 0 0 0-2.25 1.3v3.438l4.059 1.088c.494.132.494.833 0 .966l-4.06 1.087v4.224a1.5 1.5 0 0 0 2.25 1.299z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.20/autosize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+      const STREAM_RESPONSE = !0,
+        baseURL = "http://localhost:5000",
+        defaultWidgetData = {
+          backgroundColor: "#000",
+          fontColor: "#FFF",
+          borderRadius: "12px",
+          placement: "right",
+        };
+      function escapeRegExp(e) {
+        return e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      }
+      function replaceAll(e, t, n) {
+        return e.replace(new RegExp(escapeRegExp(t), "g"), n);
+      }
+      marked.setOptions({
+        highlight: function (e, t) {
+          hljs.getLanguage(t);
+          return hljs.highlight(e, { language: "javascript" }).value;
+        },
+        langPrefix: "hljs language-",
+      });
+      const urlParams = new URLSearchParams(window.location.search),
+        knowledgebaseId = urlParams.get("kbId");
+        // knowledgebaseId = '6424a99c1746c5a1a16b5f3c'
+      autosize(document.querySelector("textarea"));
+      const chatLauncherBtn = document.querySelector(".chat-launcher-btn"),
+        chatCloseBtn = document.querySelector("#chat-close-btn"),
+        chatMaximizeBtn = document.querySelector("#chat-maximize-btn"),
+        chatMinimizeBtn = document.querySelector("#chat-minimize-btn"),
+        chatWidget = document.querySelector(".chat-wrap");
+      async function getWidgetData() {
+        const e = await fetch(
+          `${baseURL}/knowledgebase/${knowledgebaseId}/chat_widget_data`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            referrerPolicy: "no-referrer",
+          }
+        );
+        if (200 === e.status) {
+          return (await e.json()).chatWidgeData || defaultWidgetData;
+        }
+        console.log("error");
+      }
+      async function createSession(e) {
+        const t = await fetch(`${baseURL}/chatbot/session?src=widget`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify({
+            knowledgebaseId: knowledgebaseId,
+            userData: e,
+          }),
+        });
+        if (200 === t.status) {
+          return await t.text();
+        }
+        console.log("error");
+      }
+      async function getAnswer(e, t) {
+        const n = await fetch(`${baseURL}/chatbot/answer`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify({ sessionId: e, query: t }),
+        });
+        if (200 === n.status) {
+          return await n.text();
+        }
+        console.log("error");
+      }
+      function getAnswerStream(e, t, n, a) {
+        const o = `${baseURL}/chatbot/answer_stream?session=${e}&query=${encodeURIComponent(
+          t
+        )}`;
+        let i = new EventSource(o);
+        (i.onmessage = (e) => {
+          n(e.data), "[DONE]" == e.data && i.close();
+        }),
+          (i.onerror = (e) => {
+            i.close(), a();
+          });
+      }
+      chatLauncherBtn.addEventListener("click", () => {
+        chatWidget.classList.add("widget-open"),
+          notifyParentWidgetExpand(),
+          setTimeout(() => {
+            document.getElementById("chat-input").focus();
+          }, 320);
+      }),
+        chatCloseBtn.addEventListener("click", () => {
+          chatWidget.classList.remove("widget-open"),
+            chatWidget.classList.remove("widget-maximize"),
+            notifyParentWidgetCollapse();
+        }),
+        chatMaximizeBtn.addEventListener("click", () => {
+          chatWidget.classList.toggle("widget-maximize"),
+            notifyParentWidgetMaximize();
+        }),
+        chatMinimizeBtn.addEventListener("click", () => {
+          chatWidget.classList.toggle("widget-maximize"),
+            notifyParentWidgetMinimize();
+        }),
+        (async () => {
+          const e = await getWidgetData(),
+            t = document.getElementById("chat-heading"),
+            n = document.getElementById("chat-description");
+          e.heading && (t.innerText = e.heading),
+            e.description && (n.innerText = e.description);
+          var a = document.createElement("style");
+          const o = `\n                .chat-widget { border-radius: ${e.borderRadius}!important}\n                .chat-header, .chat-loading-dot, .chat-launcher-btn { background-color: ${e.backgroundColor}!important}\n                .chat-launcher-btn {\n                    opacity: 1;\n                }\n                .chat-launcher-btn {\n                    color: ${e.fontColor}!important\n                }\n                .chat-header {color: ${e.fontColor}!important}\n                .chat-submit-btn svg {\n                    color: ${e.backgroundColor}!important\n                }\n                .chat-message.user .chat-message-text {background-color: ${e.backgroundColor}!important; color: ${e.fontColor}!important}\n            `;
+          (a.innerText = o), document.head.appendChild(a);
+        })();
+      let sessionId = "";
+      async function addMessageToChat() {
+        const e = document.getElementById("chat-input"),
+          t = e.value.trim();
+        if (!t) return;
+        const n = document.getElementById("chat-messages");
+        n.insertAdjacentHTML(
+          "beforeend",
+          `<div class="chat-message user"><div class="chat-message-text">${t}</div></div>`
+        );
+        n.lastChild
+          .querySelector(".chat-message-text")
+          .scrollIntoView({ block: "end" }),
+          (e.value = "");
+        const a = navigator.userAgent || navigator.vendor || window.opera;
+        if (STREAM_RESPONSE) {
+          n.insertAdjacentHTML(
+            "beforeend",
+            '<div class="chat-message chatbot"><div class="chat-message-text"><div class=\'chat-loading-dot-cont\'>\n\t\t\t\t\t\t\t\t\t\t\t<div class="chat-loading-dot"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div class="chat-loading-dot"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div class="chat-loading-dot"></div>\n\t\t\t\t\t\t\t\t\t\t</div></div></div>'
+          );
+          const e = n.lastChild.querySelector(".chat-message-text");
+          let o = "";
+          sessionId || (sessionId = await createSession({ userAgent: a }));
+          getAnswerStream(
+            sessionId,
+            t,
+            (t) => {
+              if ("[DONE]" !== t)
+                (t = replaceAll((t = JSON.parse(t).content), "<", "&lt;")),
+                  (t = replaceAll(t, ">", "&gt;")),
+                  (t = replaceAll(t, "\n", "<br/>")),
+                  (o = `${o}${t}`),
+                  (e.innerHTML = o);
+              else {
+                (o = replaceAll(o, "&lt;", "<")),
+                  (o = replaceAll(o, "&gt;", ">")),
+                  (o = replaceAll(o, "<br/>", "\n"));
+                const t = marked.parse(o);
+                e.innerHTML = t;
+              }
+              e.scrollIntoView({ block: "end" });
+            },
+            () => {
+              e.innerHTML = "Oops! I am unable to answer right now!";
+            }
+          );
+        } else {
+          sessionId || (sessionId = await createSession({ userAgent: a }));
+          const e = await getAnswer(sessionId, t),
+            o = marked.parse(
+              e.replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/, "")
+            );
+          n.insertAdjacentHTML(
+            "beforeend",
+            `<div class="chat-message chatbot"><div class="chat-message-text">${o}</div></div>`
+          );
+        }
+      }
+      const form = document.getElementById("chat-form");
+      function notifyParentWidgetExpand() {
+        window.top.postMessage("webwhiz:widget_expand", "*");
+      }
+      function notifyParentWidgetMaximize() {
+        window.top.postMessage("webwhiz:widget_maximize", "*");
+      }
+      function notifyParentWidgetMinimize() {
+        window.top.postMessage("webwhiz:widget_minimize", "*");
+      }
+      function notifyParentWidgetCollapse() {
+        window.top.postMessage("webwhiz:widget_collapse", "*");
+      }
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault(), addMessageToChat();
+      }),
+        (document.getElementById("chat-input").onkeydown = function (e) {
+          "Enter" === e.key &&
+            (e.ctrlKey || e.metaKey) &&
+            (e.preventDefault(), addMessageToChat());
+        }),
+        (window.onmessage = function (e) {
+          console.log("Inside iframe", e.data);
+        });
+    </script>
+  </body>
+</html>

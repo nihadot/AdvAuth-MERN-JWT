@@ -23,6 +23,18 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
+  planId:{
+    type: String,
+  },
+  activeSubscription:{
+    type: String,
+  },
+  avatarUrl:{
+    type: String,
+  },
+  monthUsage:{
+    type: Object,
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });
@@ -61,6 +73,8 @@ UserSchema.methods.getResetPasswordToken = function () {
 
   return resetToken;
 };
+
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MjVkYTY2MWI5YWFmMDdiY2RmZDgzOSIsImlhdCI6MTY4MDIwMjM0MiwiZXhwIjoxNjgxOTMwMzQyfQ.l_txF3GjeasJ_wb7we_IB469DIdQBvYXWGVCxcrQJn4'
 
 const User = mongoose.model("User", UserSchema);
 
